@@ -1,65 +1,245 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/normalize.min.css">
-    <link rel="stylesheet" href="css/main.css">
-    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    <style type="text/css">
-        .ui-recommend-wrapper {margin-top: 80px;}
-        .goods-history {border-bottom: none; padding-bottom: 0;}
-        .related-search {width: 1240px; margin-left: auto; margin-right: auto; margin-bottom: 80px;}
-        .related-search .list-inner {padding: 0 40px;}
-        .related-search .recommend-cate-more {margin: 0;}
-        .new-user-price, .app-price {font-family: OpenSans-Bold;}
-        .new-user-price .my_shop_price, .app-price .my_shop_price {color: #ffa127; margin-left: .5em; font-size: 16px;}
-        .app-price .date {font-family: OpenSans-Regular;}
-    </style>
+    <div>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <!-- <script src="js/vendor/modernizr-2.8.3.min.js"></script> -->
+        <style type="text/css">
+        .topMaring {
+            width: 100%;
+            height: 500px;
+        }
+
+        .ui-recommend-wrapper {
+            margin-top: 80px;
+        }
+
+        .goods-history {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .related-search {
+            width: 1240px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 80px;
+        }
+
+        .related-search .list-inner {
+            padding: 0 40px;
+        }
+
+        .related-search .recommend-cate-more {
+            margin: 0;
+        }
+
+        .new-user-price,
+        .app-price {
+            font-family: OpenSans-Bold;
+        }
+
+        .new-user-price .my_shop_price,
+        .app-price .my_shop_price {
+            color: #ffa127;
+            margin-left: .5em;
+            font-size: 16px;
+        }
+
+        .app-price .date {
+            font-family: OpenSans-Regular;
+        }
+
+        </style>
+        <!-- 窗口监听 -->
+        <script src="js/vendor/IntersectionObserver.js"></script>
+        <!-- dom 更变观察者-->
+        <script src="js/vendor/MutationObserver.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+        window.onload = function () {
+            // 获取 did 的 dom 元素
+            var did = document.querySelector('[did="0001"]')
+
+            var img = did.querySelectorAll('img')
+
+            TrackExpose(did)
+            TrackClick(did, '.ui-recommend-product .logsss_event_cl')
+
+            // 获取 sku
+            var imgSkuArr = []
+
+            var imgSku = img.forEach((item) => {
+                imgSkuArr.push(item.attributes['data-sku'].value)
+                return item.attributes['data-sku'].value
+            })
+
+            // 获取当前时间戳
+            var timeStamp = new Date().getTime()
+
+            // 获取当前设备
+            // window.navigator
+            function devices() {
+                if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    return 'm'
+                    // 移动端操作
+                } else {
+                    return 'PC'
+                    // PC端操作
+                }
+            }
+            var devicesPram = devices()
+            // 推荐位模块
+            var glb_pm = 'mr'
+
+
+            // 点击事件
+            // console.log('did',did)
+            // var clsArr = did.querySelectorAll('.ui-recommend-product')
+            // clsArr.forEach(function (item) {
+            //     // console.log('item',item.querySelectorAll('.logsss_event_cl'))
+            //     item.querySelectorAll('.logsss_event_cl').forEach(function (e) {
+            //         /* body... */
+            //         e.addEventListener('click', function (argument) {
+            //             /* body... */
+            //             console.log('click', argument)
+            //         })
+            //     })
+            // })
+
+
+            // 曝光事件
+            var callback = function (entries, observer) {
+
+                if (entries[0].isIntersecting) {
+                    // console.log('view')
+                    // 曝光返回
+                }
+            };
+            var observer = new IntersectionObserver(callback);
+            observer.observe(did);
+
+            // 页面停留时间 onclick 计算？
+
+            // 打印时间
+            window.addEventListener('beforeunload', function (event) {
+                console.log(new Date().getTime())
+                console.log('I am the 1st one.');
+            });
+            window.addEventListener('unload', function (event) {
+                console.log('I am the 3rd one.');
+            });
+
+
+
+
+        }
+        /*
+        监听重绘
+
+        var targetNode = document.querySelector('.ui-recommend-products')
+
+        // Options for the observer (which mutations to observe)
+        var config = { attributes: true, childList: true, subtree: true };
+
+        // Callback function to execute when mutations are observed
+        var callback = function(mutationsList) {
+        for(var mutation of mutationsList) {
+            if (mutation.type == 'childList') {
+                console.log('A child node has been added or removed.');
+            }
+            else if (mutation.type == 'attributes') {
+                console.log('The ' + mutation.attributeName + ' attribute was modified.');
+            }
+        }
+        };
+
+        // Create an observer instance linked to the callback function
+        var observer = new MutationObserver(callback);
+          "did": "0001",
+          "oi": "session_id",
+          "u": "userid，未登录时不需要填写",
+          "pl": "上一个页面url,没有时可为空",
+          "d": "站点标识",
+          "b": "页面大类",
+          "s": "页面大类下面的页面小类",
+          "p": "页面编码",
+          "pc":  "商品分类",
+          "tm": "当前时间戳",
+          "w": "页面停留时间",
+          "dc": "国家对应的编号",
+          "t": "行为类型",
+          "ubcta": "子事件属性",
+          "pm": "页面模块",
+          "od": "用户的cookie id，不清除缓存会一直存在",
+          "osr_referrer": "外部来源链接，没有时为originurl",
+          "cl": "当前页",
+          "plf": "区分pc和m的数据",
+          "osr_landing": "着陆页"
+          glb_ubcta ： 信息商品编号 与 推荐位位置
+
+        */
+
+        </script>
+    </div>
 </head>
 
 <body>
-    <div class="ui-recommend-wrapper" id="recommend_wrapper1"><a href="javascript:;" class="recommend-nav-prev"></a>
+    <div class="topMaring"></div>
+    <div class="topMaring"></div>
+    <div class="topMaring"></div>
+    <div class="topMaring"></div>
+    <div class="topMaring"></div>
+    <div class="topMaring"></div>
+    <div class="ui-recommend-wrapper" id="recommend_wrapper1" did="0001"><a href="javascript:;" class="recommend-nav-prev"></a>
         <h4 class="section-title tc ui-recommend-title">CUSTOMERS ALSO VIEWED</h4>
         <div class="ui-recommend-products">
-            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'286192201','rank':1},'skuinfo':{'sku':'286192201','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
-                <p class="goods-img"><a href="https://www.zaful.com/drop-shoulders-faux-shearling-hoodie-p_582447.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="286192201" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/09/27thumb-img/1540603877326746031.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/09/27thumb-img/1540603877326746031.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'286192201'}}"></a></p>
-                <p class="goods-title"><a title="Drop Shoulders Faux Shearling Hoodie WHITE ONE SIZE" href="https://www.zaful.com/drop-shoulders-faux-shearling-hoodie-p_582447.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Drop Shoulders Faux Shearling Hoodie WHITE ONE SIZE</a></p>
-                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="286192201" data-orgp="14.99" orgp="14.99" data-bz="14.99" style="visibility: visible;">$14.99</strong></span><span class="js-price-mark-286192201">(SALE)</span></p>
+            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'280753005','rank':1},'skuinfo':{'sku':'280753005','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
+                <p class="goods-img"><a href="https://www.zaful.com/slip-pockets-faux-fur-teddy-coat-p_563535.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="280753005" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/08/31thumb-img/1541010327919637120.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/08/31thumb-img/1541010327919637120.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'280753005'}}"></a></p>
+                <p class="goods-title"><a title="Slip Pockets Faux Fur Teddy Coat LIGHT BROWN M" href="https://www.zaful.com/slip-pockets-faux-fur-teddy-coat-p_563535.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Slip Pockets Faux Fur Teddy Coat LIGHT BROWN M</a></p>
+                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="280753005" data-orgp="23.99" orgp="23.99" data-bz="23.99" style="visibility: visible;">$23.99</strong></span><span class="js-price-mark-280753005">(SALE)</span></p>
             </div>
-            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'295626801','rank':2},'skuinfo':{'sku':'295626801','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
-                <p class="goods-img"><a href="https://www.zaful.com/plain-mock-neck-faux-shearling-sweatshirt-p_584097.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="295626801" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/09/29thumb-img/1538187044884685662.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/09/29thumb-img/1538187044884685662.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'295626801'}}"></a></p>
-                <p class="goods-title"><a title="Plain Mock Neck Faux Shearling Sweatshirt WHITE ONE SIZE" href="https://www.zaful.com/plain-mock-neck-faux-shearling-sweatshirt-p_584097.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Plain Mock Neck Faux Shearling Sweatshirt WHITE ONE SIZE</a></p>
-                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="295626801" data-orgp="15.99" orgp="15.99" data-bz="15.99" style="visibility: visible;">$15.99</strong></span><span class="js-price-mark-295626801">(SALE)</span></p>
+            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'281273013','rank':2},'skuinfo':{'sku':'281273013','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
+                <p class="goods-img"><a href="https://www.zaful.com/zip-up-fluffy-faux-fur-winter-coat-p_565439.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="281273013" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/09/01thumb-img/1540936139008250288.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/09/01thumb-img/1540936139008250288.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'281273013'}}"></a></p>
+                <p class="goods-title"><a title="Zip Up Fluffy Faux Fur Winter Coat CAMEL BROWN S" href="https://www.zaful.com/zip-up-fluffy-faux-fur-winter-coat-p_565439.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Zip Up Fluffy Faux Fur Winter Coat CAMEL BROWN S</a></p>
+                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="281273013" data-orgp="22.99" orgp="22.99" data-bz="22.99" style="visibility: visible;">$22.99</strong></span><span class="js-price-mark-281273013">(SALE)</span></p>
             </div>
-            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'318581302','rank':3},'skuinfo':{'sku':'318581302','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
-                <p class="goods-img"><a href="https://www.zaful.com/graphic-pullover-sweatshirt-p_599586.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="318581302" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/10/22thumb-img/1541385197641787583.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/10/22thumb-img/1541385197641787583.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'318581302'}}"></a></p>
-                <p class="goods-title"><a title="Graphic Pullover Sweatshirt BLACK M" href="https://www.zaful.com/graphic-pullover-sweatshirt-p_599586.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Graphic Pullover Sweatshirt BLACK M</a></p>
-                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="318581302" data-orgp="11.99" orgp="11.99" data-bz="11.99" style="visibility: visible;">$11.99</strong></span><span class="js-price-mark-318581302">(SALE)</span></p>
+            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'281356503','rank':3},'skuinfo':{'sku':'281356503','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
+                <p class="goods-img"><a href="https://www.zaful.com/dropped-shoulder-mock-neck-sweater-p_574968.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="281356503" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/09/17thumb-img/1538262501933178467.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/09/17thumb-img/1538262501933178467.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'281356503'}}"></a></p>
+                <p class="goods-title"><a title="Dropped Shoulder Mock Neck Sweater CHERRY RED ONE SIZE" href="https://www.zaful.com/dropped-shoulder-mock-neck-sweater-p_574968.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Dropped Shoulder Mock Neck Sweater CHERRY RED ONE SIZE</a></p>
+                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="281356503" data-orgp="18.99" orgp="18.99" data-bz="18.99" style="visibility: visible;">$18.99</strong></span><span class="js-price-mark-281356503">(SALE)</span></p>
             </div>
-            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'291572601','rank':4},'skuinfo':{'sku':'291572601','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
-                <p class="goods-img"><a href="https://www.zaful.com/kangaroo-pocket-plain-faux-fur-hoodie-p_583470.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="291572601" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/10/19thumb-img/1539888311445076066.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/10/19thumb-img/1539888311445076066.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'291572601'}}"></a></p>
-                <p class="goods-title"><a title="Kangaroo Pocket Plain Faux Fur Hoodie WARM WHITE S" href="https://www.zaful.com/kangaroo-pocket-plain-faux-fur-hoodie-p_583470.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Kangaroo Pocket Plain Faux Fur Hoodie WARM WHITE S</a></p>
-                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="291572601" data-orgp="14.99" orgp="14.99" data-bz="14.99" style="visibility: visible;">$14.99</strong></span><span class="js-price-mark-291572601">(SALE)</span></p>
+            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'234462103','rank':4},'skuinfo':{'sku':'234462103','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
+                <p class="goods-img"><a href="https://www.zaful.com/hooded-open-front-lamb-wool-teddy-coat-p_441271.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="234462103" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2017/10/30/thumb-img/1539901483917107370.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2017/10/30/thumb-img/1539901483917107370.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'234462103'}}"></a></p>
+                <p class="goods-title"><a title="Hooded Open Front Lamb Wool Teddy Coat APRICOT S" href="https://www.zaful.com/hooded-open-front-lamb-wool-teddy-coat-p_441271.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Hooded Open Front Lamb Wool Teddy Coat APRICOT S</a></p>
+                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="234462103" data-orgp="25.99" orgp="25.99" data-bz="25.99" style="visibility: visible;">$25.99</strong></span><span class="js-price-mark-234462103">(SALE)</span></p>
             </div>
-            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'280813101','rank':5},'skuinfo':{'sku':'280813101','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
-                <p class="goods-img"><a href="https://www.zaful.com/distressed-hooded-denim-jacket-p_562112.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="280813101" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/08/29thumb-img/1535910908329176679.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/08/29thumb-img/1535910908329176679.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'280813101'}}"></a></p>
-                <p class="goods-title"><a title="Distressed Hooded Denim Jacket DENIM BLUE M" href="https://www.zaful.com/distressed-hooded-denim-jacket-p_562112.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Distressed Hooded Denim Jacket DENIM BLUE M</a></p>
-                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="280813101" data-orgp="24.99" orgp="24.99" data-bz="24.99" style="visibility: visible;">$24.99</strong></span><span class="js-price-mark-280813101">(SALE)</span></p>
+            <div class="ui-recommend-product logsss_event_ps" data-logsss-event-value="{'ubcta':{'mrlc':'T_3','sku':'281067402','rank':5},'skuinfo':{'sku':'281067402','pam':'0','pc':'10','k':'sz01'},'x':'sku'}">
+                <p class="goods-img"><a href="https://www.zaful.com/fluffy-faux-fur-winter-teddy-coat-p_563830.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}"><img data-sku="281067402" src="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/08/31thumb-img/1535658890754938226.jpg" data-original="https://gloimg.zafcdn.com/zaful/pdm-product-pic/Clothing/2018/08/31thumb-img/1535658890754938226.jpg" data-logsss-browser-value="{'pm':'mr','bv':{'mrlc':'T_3','sku':'281067402'}}"></a></p>
+                <p class="goods-title"><a title="Fluffy Faux Fur Winter Teddy Coat CAMEL BROWN M" href="https://www.zaful.com/fluffy-faux-fur-winter-teddy-coat-p_563830.html" class="logsss_event_cl" data-logsss-gls="" data-logsss-const-value="{'x':'sku','pm':'mr','isFromSearch':'true'}">Fluffy Faux Fur Winter Teddy Coat CAMEL BROWN M</a></p>
+                <p class="goods-price"><span class="shop-price"><strong class="bizhong">USD</strong><strong class="my_shop_price js-refresh-all hidden" data-sku="281067402" data-orgp="28.99" orgp="28.99" data-bz="28.99" style="visibility: visible;">$28.99</strong></span><span class="js-price-mark-281067402">(SALE)</span></p>
             </div>
         </div><a href="javascript:;" class="recommend-nav-next"></a></div>
     <script src="js/main.js"></script>
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
+
+
+    </script>
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <!-- <script>
     (function (b, o, i, l, e, r) {
         b.GoogleAnalyticsObject = l;
         b[l] || (b[l] =
             function () {
-                (b[l].q = b[l].q || []).push(arguments) });
+                (b[l].q = b[l].q || []).push(arguments)
+            });
         b[l].l = +new Date;
         e = o.createElement(i);
         r = o.getElementsByTagName(i)[0];
@@ -68,6 +248,10 @@
     }(window, document, 'script', 'ga'));
     ga('create', 'UA-XXXXX-X', 'auto');
     ga('send', 'pageview');
+
+    </script> -->
+    <script>
+
 
     </script>
 </body>
